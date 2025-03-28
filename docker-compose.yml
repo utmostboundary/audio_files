@@ -1,0 +1,32 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.back
+    volumes:
+      - .:/audio_files
+    env_file: .env
+    command: >
+      sh -c "uvicorn app.entrypoint.http_main:create_fastapi_app --factory --reload --host 0.0.0.0 --port 8088"
+    depends_on:
+      - db_postgres
+    networks:
+      - app_network
+    restart: always
+
+  db_postgres:
+    container_name: db_postgres
+    image: postgres:16.2-alpine
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - app_network
+    volumes:
+      - audio_files_db:/var/lib/postgresql/data/
+
+volumes:
+  audio_files_db:
+
+networks:
+  app_network:
