@@ -1,0 +1,9 @@
+from typing import Protocol
+
+from app.application.entities.user import JwtToken, TokenPayload
+
+
+class TokenProvider(Protocol):
+    def validate(self, token: str) -> JwtToken: ...
+    def create_access_token(self, payload: TokenPayload) -> JwtToken: ...
+    def create_refresh_token(self, payload: TokenPayload) -> JwtToken: ...

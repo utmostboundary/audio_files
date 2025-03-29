@@ -1,6 +1,6 @@
-from sqlalchemy import Table, Column, String, BigInteger
+from sqlalchemy import Table, Column, String, BigInteger, Enum
 
-from app.application.entities.user import User
+from app.application.entities.user import User, UserRole
 from app.infrastructure.databases.postgres.tables.base import mapper_registry
 
 users_table = Table(
@@ -8,6 +8,7 @@ users_table = Table(
     mapper_registry.metadata,
     Column("id", BigInteger, primary_key=True, autoincrement=True),
     Column("email", String, nullable=False),
+    Column("role", Enum(UserRole), nullable=False),
 )
 
 

@@ -6,6 +6,7 @@ from dishka.integrations import fastapi as fastapi_integration
 
 from app.entrypoint.config import provide_context
 from app.entrypoint.ioc import setup_di
+from app.infrastructure.databases.postgres.tables import map_tables
 from app.presentation.http.setup import setup_routers
 
 
@@ -25,5 +26,5 @@ def create_fastapi_app() -> FastAPI:
 
     fastapi_integration.setup_dishka(container, fastapi_app)
     setup_routers(app=fastapi_app)
-
+    map_tables()
     return fastapi_app
