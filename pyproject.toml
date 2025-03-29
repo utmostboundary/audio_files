@@ -12,6 +12,8 @@ uvicorn = "^0.34.0"
 dishka = "^1.5.1"
 sqlalchemy = {version = "^2.0.40", extras = ["asyncio"]}
 orjson = "^3.10.16"
+alembic = "^1.15.2"
+asyncpg = "^0.30.0"
 
 
 [build-system]
