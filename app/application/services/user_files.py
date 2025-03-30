@@ -29,6 +29,7 @@ class UserFiles:
     async def upload(self, request: UploadFileRequest) -> None:
         user = await self._identity_provider.get_user()
         path = await self._file_manager.save(
+            user_id=user.id,
             name=request.audio_name,
             metadata=request.file,
         )

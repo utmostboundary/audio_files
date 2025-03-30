@@ -17,4 +17,3 @@ class EmailAlreadyExistsError(ApplicationError):
     @property
     def message(self):
         return "Email already exists"
-

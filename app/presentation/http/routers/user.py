@@ -5,7 +5,7 @@ from fastapi import APIRouter, UploadFile, Form, HTTPException
 
 from app.application.errors.base import ApplicationError
 from app.application.file_manager import FileMetadata
-from app.application.services.upload_file import UserFiles, UploadFileRequest
+from app.application.services.user_files import UserFiles, UploadFileRequest
 
 router = APIRouter(prefix="/users", tags=["User"])
 

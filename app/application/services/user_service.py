@@ -40,7 +40,10 @@ class UserService:
         user = await self._user_gateway.by_id(user_id=UserId(user_id))
         if not user:
             raise EmailAlreadyExistsError()
-        if await self._user_gateway.exists_by_email(email=request.email) and user.email != request.email:
+        if (
+            await self._user_gateway.exists_by_email(email=request.email)
+            and user.email != request.email
+        ):
             raise
         user.email = request.email
         user.role = request.role

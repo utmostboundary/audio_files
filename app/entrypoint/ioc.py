@@ -15,7 +15,7 @@ from app.application.gateways.audio_file import AudioFileGateway
 from app.application.gateways.refresh_session import RefreshSessionGateway
 from app.application.gateways.user import UserGateway
 from app.application.services.auth_service import AuthenticationService
-from app.application.services.upload_file import UserFiles
+from app.application.services.user_files import UserFiles
 from app.application.services.user_service import UserService
 from app.application.transaction_manager import TransactionManager
 from app.infrastructure.auth.auth_token_gettable import AuthTokenGettable
