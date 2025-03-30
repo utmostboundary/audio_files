@@ -8,7 +8,7 @@ services:
       - .:/audio_files
     env_file: .env
     command: >
-      sh -c "uvicorn app.entrypoint.main:create_fastapi_app --factory --reload --host 0.0.0.0 --port 8000"
+      sh -c "alembic upgrade head && uvicorn app.entrypoint.main:create_fastapi_app --factory --reload --host 0.0.0.0 --port 8000"
     depends_on:
       - db_postgres
     ports:
