@@ -2,7 +2,7 @@ from fastapi import Security
 from fastapi.security import HTTPBearer
 from starlette.requests import Request
 
-from app.application.errors import AuthenticationError
+from app.application.errors.auth import AuthenticationError
 from app.infrastructure.auth.auth_token_gettable import AuthTokenGettable
 
 AuthRequired = Security(HTTPBearer())

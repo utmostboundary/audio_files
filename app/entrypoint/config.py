@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from app.infrastructure.auth.config import AuthConfig, YandexOAuthConfig
 from app.infrastructure.databases.postgres.config import PostgresConfig
+from app.infrastructure.file_manager.config import LocalFileConfig
 
 
 def get_postgres_config() -> PostgresConfig:
@@ -36,13 +37,29 @@ def get_yandex_oauth_config() -> YandexOAuthConfig:
     )
 
 
+def get_local_file_config() -> LocalFileConfig:
+    return LocalFileConfig(
+        base_directory="audio",
+        allowed_content_types=[
+            "image/jpeg",
+            "image/png",
+            "text/csv",
+            "image/svg+xml",
+            "image/webp",
+            "application/xml",
+        ],
+    )
+
+
 def provide_context() -> dict:
     postgres_config = get_postgres_config()
     auth_config = get_auth_config()
     yandex_oauth_config = get_yandex_oauth_config()
+    local_file_config = get_local_file_config()
     context = {
         PostgresConfig: postgres_config,
         AuthConfig: auth_config,
         YandexOAuthConfig: yandex_oauth_config,
+        LocalFileConfig: local_file_config,
     }
     return context

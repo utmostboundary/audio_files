@@ -1,9 +1,7 @@
-from typing import Annotated
-
 from dishka.integrations.fastapi import inject, FromDishka
-from fastapi import APIRouter, HTTPException, Body
+from fastapi import APIRouter, HTTPException
 
-from app.application.errors import ApplicationError
+from app.application.errors.base import ApplicationError
 from app.application.services.auth_service import (
     SignInRequest,
     AuthenticationService,

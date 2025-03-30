@@ -1,7 +1,7 @@
 import aiohttp
 
 from app.application.auth.oauth import ExternalOAuthService, UserData
-from app.application.errors import AuthorizationError
+from app.application.errors.auth import AuthorizationError
 from app.infrastructure.auth.config import YandexOAuthConfig
 
 

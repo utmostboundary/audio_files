@@ -3,8 +3,9 @@ from datetime import datetime, UTC
 from jose import JWTError, jwt
 
 from app.application.auth.token_provider import TokenProvider
-from app.application.entities.user import JwtToken, TokenPayload, UserId
-from app.application.errors import InvalidTokenError
+from app.application.entities.user import JwtToken, TokenPayload
+from app.application.entities.ids import UserId
+from app.application.errors.auth import InvalidTokenError
 from app.infrastructure.auth.config import AuthConfig
 
 

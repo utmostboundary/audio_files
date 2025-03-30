@@ -1,6 +1,7 @@
 from typing import Protocol
 
-from app.application.entities.user import UserId, User
+from app.application.entities.user import User
+from app.application.entities.ids import UserId
 
 
 class UserGateway(Protocol):

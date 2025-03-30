@@ -1,10 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import NewType
 
-from app.application.entities.user import UserId
-
-RefreshSessionId = NewType("RefreshSessionId", int)
+from app.application.entities.ids import UserId, RefreshSessionId
 
 
 @dataclass(kw_only=True)

@@ -1,7 +1,8 @@
 from sqlalchemy import select, exists
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.application.entities.user import UserId, User
+from app.application.entities.user import User
+from app.application.entities.ids import UserId
 from app.application.gateways.user import UserGateway
 from app.infrastructure.databases.postgres.tables.user import users_table
 

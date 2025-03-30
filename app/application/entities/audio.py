@@ -1,12 +1,11 @@
 from dataclasses import dataclass
-from typing import NewType
 
-AudioFileId = NewType("AudioFileId", int)
+from app.application.entities.ids import UserId, AudioFileId
 
 
 @dataclass(kw_only=True)
 class AudioFile:
-    id: AudioFileId
+    id: AudioFileId | None
     name: str
     path: str
-    user_id: str
+    user_id: UserId

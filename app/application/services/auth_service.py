@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from app.application.auth.oauth import ExternalOAuthService
 from app.application.auth.token_provider import TokenProvider
 from app.application.entities.user import User, UserRole, TokenPayload
-from app.application.errors import InvalidTokenError, ApplicationError
+from app.application.errors.auth import InvalidTokenError
+from app.application.errors.base import ApplicationError
 from app.application.factories.refresh_session import RefreshSessionFactory
 from app.application.gateways.refresh_session import RefreshSessionGateway
 from app.application.gateways.user import UserGateway
