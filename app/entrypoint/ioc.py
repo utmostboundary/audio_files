@@ -15,7 +15,7 @@ from app.application.gateways.audio_file import AudioFileGateway
 from app.application.gateways.refresh_session import RefreshSessionGateway
 from app.application.gateways.user import UserGateway
 from app.application.services.auth_service import AuthenticationService
-from app.application.services.upload_file import UploadFileHandler
+from app.application.services.upload_file import UserFiles
 from app.application.services.user_service import UserService
 from app.application.transaction_manager import TransactionManager
 from app.infrastructure.auth.auth_token_gettable import AuthTokenGettable
@@ -86,7 +86,7 @@ def provide_factories(provider: Provider) -> None:
 
 def provide_interactors(provider: Provider) -> None:
     provider.provide(AuthenticationService, scope=Scope.REQUEST)
-    provider.provide(UploadFileHandler, scope=Scope.REQUEST)
+    provider.provide(UserFiles, scope=Scope.REQUEST)
     provider.provide(UserService, scope=Scope.REQUEST)
 
 

@@ -24,5 +24,9 @@ class SqlAUserGateway(UserGateway):
         result = await self._session.execute(statement=stmt)
         return result.scalar()
 
+    async def exists_by_email(self, email: str) -> bool:
+        stmt = select(exists().where(users_table.c.email == email))
+        return await self._session.scalar(statement=stmt)
+
     async def remove(self, user: User) -> None:
         await self._session.delete(user)

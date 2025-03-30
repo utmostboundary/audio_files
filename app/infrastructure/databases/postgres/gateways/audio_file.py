@@ -14,7 +14,7 @@ class SqlAAudioFileGateway(AudioFileGateway):
     def add(self, audio_file: AudioFile):
         self._session.add(audio_file)
 
-    async def by_user_id(self, user_id: UserId) -> AudioFile | None:
+    async def by_user_id(self, user_id: UserId) -> list[AudioFile]:
         stmt = select(AudioFile).where(audio_files_table.c.user_id == user_id)
         result = await self._session.execute(statement=stmt)
-        return result.scalar()
+        return list(result.scalars().all())

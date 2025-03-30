@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from app.application.auth.identity_provider import IdentityProvider
+from app.application.entities.audio import AudioFile
 from app.application.file_manager import FileMetadata, FileManager
 from app.application.gateways.audio_file import AudioFileGateway
 from app.application.transaction_manager import TransactionManager
@@ -12,7 +13,7 @@ class UploadFileRequest:
     file: FileMetadata
 
 
-class UploadFileHandler:
+class UserFiles:
     def __init__(
         self,
         identity_provider: IdentityProvider,
@@ -25,7 +26,7 @@ class UploadFileHandler:
         self._audio_file_gateway = audio_file_gateway
         self._transaction_manager = transaction_manager
 
-    async def execute(self, request: UploadFileRequest) -> None:
+    async def upload(self, request: UploadFileRequest) -> None:
         user = await self._identity_provider.get_user()
         path = await self._file_manager.save(
             name=request.audio_name,
@@ -35,3 +36,8 @@ class UploadFileHandler:
         self._audio_file_gateway.add(audio_file=audio_file)
         if not await self._transaction_manager.commit():
             await self._file_manager.delete(file_path=path)
+
+    async def get_all(self) -> list[AudioFile]:
+        user = await self._identity_provider.get_user()
+        audio_files = await self._audio_file_gateway.by_user_id(user_id=user.id)
+        return audio_files

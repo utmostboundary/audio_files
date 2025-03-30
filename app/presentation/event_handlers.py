@@ -14,7 +14,7 @@ async def initialize_admin_state_on_startup(app: FastAPI) -> None:
             TransactionManager
         )
         user_gateway: UserGateway = await request_container.get(UserGateway)
-        if not await user_gateway.by_email(email="files.audio@yandex.com"):
+        if not await user_gateway.exists_by_email(email="files.audio@yandex.com"):
             user = User(id=None, email="files.audio@yandex.com", role=UserRole.ADMIN)
             user_gateway.add(user=user)
 

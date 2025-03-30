@@ -29,15 +29,13 @@ async def get_user(user_id: int, handler: FromDishka[UserService]):
 @inject
 async def update_user(
     user_id: int,
-    email: Annotated[str, Body()],
+    request: UpdateUserRequest,
     handler: FromDishka[UserService],
 ):
     try:
         await handler.update_user(
-            request=UpdateUserRequest(
-                user_id=user_id,
-                email=email,
-            )
+            user_id=user_id,
+            request=request,
         )
     except UserDoesNotExistError as e:
         raise HTTPException(status_code=404, detail=e.message)
