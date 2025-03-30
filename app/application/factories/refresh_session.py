@@ -8,7 +8,6 @@ class RefreshSessionFactory:
 
     def from_refresh_token(self, refresh_token: str) -> RefreshSession:
         jwt_token = self._token_provider.validate(refresh_token)
-
         return RefreshSession(
             id=None,
             refresh_token=refresh_token,

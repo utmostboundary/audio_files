@@ -9,8 +9,8 @@ refresh_sessions_table = Table(
     Column("id", BigInteger, primary_key=True, autoincrement=True),
     Column("user_id", ForeignKey("users.id"), nullable=False),
     Column("refresh_token", String, nullable=False),
-    Column("expires_in", DateTime, nullable=False),
-    Column("created_at", DateTime, nullable=False),
+    Column("expires_in", DateTime(timezone=True), nullable=False),
+    Column("created_at", DateTime(timezone=True), nullable=False),
 )
 
 

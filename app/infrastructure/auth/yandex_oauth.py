@@ -1,5 +1,3 @@
-import base64
-
 import aiohttp
 
 from app.application.auth.oauth import ExternalOAuthService, UserData
@@ -30,19 +28,12 @@ class YandexOAuthService(ExternalOAuthService):
                 return UserData(email=result["default_email"])
 
     async def _fetch_token(self, code) -> str:
-        auth_str = f"{self._config.client_id}:{self._config.client_secret}"
-        auth_b64 = base64.b64encode(auth_str.encode()).decode()
-        print(f"================CODE {code}")
         data = {
             "grant_type": "authorization_code",
             "code": code,
             "client_id": self._config.client_id,
             "client_secret": self._config.client_secret,
         }
-        # headers = {
-        #     "Authorization": f"Basic {auth_b64}",
-        #     "Content-Type": "application/x-www-form-urlencoded",
-        # }
 
         async with aiohttp.ClientSession() as session:
             async with session.post(

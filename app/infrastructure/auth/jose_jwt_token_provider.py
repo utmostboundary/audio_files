@@ -15,7 +15,9 @@ class JoseJwtTokenProvider(TokenProvider):
     def validate(self, token: str) -> JwtToken:
         try:
             credentials = jwt.decode(
-                token, key=self._auth_config.jwt_secret, algorithms=["HS256"]
+                token,
+                key=self._auth_config.jwt_secret,
+                algorithms=["HS256"],
             )
 
         except JWTError as e:
@@ -28,7 +30,7 @@ class JoseJwtTokenProvider(TokenProvider):
             raise InvalidTokenError("Token expired")
 
         payload = TokenPayload(
-            user_id=UserId(credentials["user_id"]),
+            user_id=UserId(int(credentials["user_id"])),
             role=credentials["role"],
         )
 

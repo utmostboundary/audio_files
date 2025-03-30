@@ -3,15 +3,21 @@ from dataclasses import dataclass
 from app.application.auth.oauth import ExternalOAuthService
 from app.application.auth.token_provider import TokenProvider
 from app.application.entities.user import User, UserRole, TokenPayload
+from app.application.errors import InvalidTokenError, ApplicationError
 from app.application.factories.refresh_session import RefreshSessionFactory
 from app.application.gateways.refresh_session import RefreshSessionGateway
 from app.application.gateways.user import UserGateway
 from app.application.transaction_manager import TransactionManager
 
 
-@dataclass
+@dataclass(frozen=True)
 class SignInRequest:
     code: str
+
+
+@dataclass(frozen=True)
+class RefreshTokenRequest:
+    refresh_token: str
 
 
 @dataclass
@@ -53,5 +59,36 @@ class AuthenticationService:
             refresh_token.value
         )
         self._refresh_session_gateway.add(refresh_session)
-        await self._transaction_manager.commit()
-        return CredentialsResponse(access_token.value, refresh_token.value)
+        if await self._transaction_manager.commit():
+            return CredentialsResponse(access_token.value, refresh_token.value)
+        raise ApplicationError()
+
+    async def refresh(self, request: RefreshTokenRequest) -> CredentialsResponse:
+        refresh_session = await self._refresh_session_gateway.by_refresh_token(
+            refresh_token=request.refresh_token
+        )
+
+        if refresh_session is None:
+            raise InvalidTokenError("Invalid refresh token")
+
+        await self._refresh_session_gateway.remove(refresh_session)
+
+        user = await self._user_gateway.by_id(refresh_session.user_id)
+
+        if user is None:
+            raise InvalidTokenError("Invalid refresh token")
+
+        token_payload = TokenPayload(user_id=user.id, role=user.role)
+
+        new_access_token = self._token_provider.create_access_token(token_payload)
+        new_refresh_token = self._token_provider.create_refresh_token(token_payload)
+
+        refresh_session = self._refresh_session_factory.from_refresh_token(
+            new_refresh_token.value
+        )
+
+        self._refresh_session_gateway.add(refresh_session)
+
+        if await self._transaction_manager.commit():
+            return CredentialsResponse(new_access_token.value, new_refresh_token.value)
+        raise ApplicationError()
