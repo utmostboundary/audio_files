@@ -5,17 +5,17 @@ from fastapi import APIRouter, UploadFile, Form, HTTPException
 
 from app.application.errors.base import ApplicationError
 from app.application.file_manager import FileMetadata
-from app.application.services.upload_file import UploadFile, UploadFileRequest
+from app.application.services.upload_file import UploadFileHandler, UploadFileRequest
 
 router = APIRouter(prefix="/users", tags=["User"])
 
 
 @router.post("/upload_audio/")
 @inject
-async def sign_in(
+async def upload_audio(
     file: Annotated[UploadFile, Form()],
     audio_name: Annotated[str, Form()],
-    handler: FromDishka[UploadFile],
+    handler: FromDishka[UploadFileHandler],
 ) -> None:
     try:
         await handler.execute(

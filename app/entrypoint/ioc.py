@@ -15,7 +15,8 @@ from app.application.gateways.audio_file import AudioFileGateway
 from app.application.gateways.refresh_session import RefreshSessionGateway
 from app.application.gateways.user import UserGateway
 from app.application.services.auth_service import AuthenticationService
-from app.application.services.upload_file import UploadFile
+from app.application.services.upload_file import UploadFileHandler
+from app.application.services.user_service import UserService
 from app.application.transaction_manager import TransactionManager
 from app.infrastructure.auth.auth_token_gettable import AuthTokenGettable
 from app.infrastructure.auth.config import AuthConfig, YandexOAuthConfig
@@ -85,7 +86,8 @@ def provide_factories(provider: Provider) -> None:
 
 def provide_interactors(provider: Provider) -> None:
     provider.provide(AuthenticationService, scope=Scope.REQUEST)
-    provider.provide(UploadFile, scope=Scope.REQUEST)
+    provider.provide(UploadFileHandler, scope=Scope.REQUEST)
+    provider.provide(UserService, scope=Scope.REQUEST)
 
 
 def provide_auth(provider: Provider) -> None:
@@ -94,7 +96,11 @@ def provide_auth(provider: Provider) -> None:
         scope=Scope.REQUEST,
         provides=IdentityProvider,
     )
-    provider.provide(JoseJwtTokenProvider, scope=Scope.REQUEST, provides=TokenProvider)
+    provider.provide(
+        JoseJwtTokenProvider,
+        scope=Scope.REQUEST,
+        provides=TokenProvider,
+    )
     provider.provide(
         FastAPIAuthTokenGettable,
         scope=Scope.REQUEST,

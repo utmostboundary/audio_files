@@ -23,3 +23,6 @@ class SqlAUserGateway(UserGateway):
         stmt = select(User).where(users_table.c.email == email)
         result = await self._session.execute(statement=stmt)
         return result.scalar()
+
+    async def remove(self, user: User) -> None:
+        await self._session.delete(user)

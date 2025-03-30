@@ -13,3 +13,6 @@ class UserGateway(Protocol):
 
     async def by_email(self, email: str) -> User | None:
         raise NotImplementedError
+
+    async def remove(self, user: User) -> None:
+        raise NotImplementedError

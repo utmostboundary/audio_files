@@ -41,12 +41,10 @@ def get_local_file_config() -> LocalFileConfig:
     return LocalFileConfig(
         base_directory="audio",
         allowed_content_types=[
-            "image/jpeg",
-            "image/png",
-            "text/csv",
-            "image/svg+xml",
-            "image/webp",
-            "application/xml",
+            "audio/mpeg",
+            "audio/wav",
+            "audio/ogg",
+            "audio/mp4",
         ],
     )
 

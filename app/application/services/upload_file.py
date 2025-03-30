@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from app.application.auth.identity_provider import IdentityProvider
 from app.application.file_manager import FileMetadata, FileManager
 from app.application.gateways.audio_file import AudioFileGateway
-from app.application.gateways.user import UserGateway
 from app.application.transaction_manager import TransactionManager
 
 
@@ -13,18 +12,16 @@ class UploadFileRequest:
     file: FileMetadata
 
 
-class UploadFile:
+class UploadFileHandler:
     def __init__(
         self,
         identity_provider: IdentityProvider,
         file_manager: FileManager,
-        user_gateway: UserGateway,
         audio_file_gateway: AudioFileGateway,
         transaction_manager: TransactionManager,
     ):
         self._identity_provider = identity_provider
         self._file_manager = file_manager
-        self._user_gateway = user_gateway
         self._audio_file_gateway = audio_file_gateway
         self._transaction_manager = transaction_manager
 
