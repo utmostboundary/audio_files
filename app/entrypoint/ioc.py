@@ -7,11 +7,13 @@ from dishka import (
 from dishka.integrations.fastapi import FastapiProvider
 
 from app.application.auth.identity_provider import IdentityProvider
+from app.application.auth.oauth import ExternalOAuthService
 from app.application.auth.token_provider import TokenProvider
 from app.infrastructure.auth.auth_token_gettable import AuthTokenGettable
-from app.infrastructure.auth.config import AuthConfig
+from app.infrastructure.auth.config import AuthConfig, YandexOAuthConfig
 from app.infrastructure.auth.http_idp import HttpIdentityProvider
 from app.infrastructure.auth.jose_jwt_token_provider import JoseJwtTokenProvider
+from app.infrastructure.auth.yandex_oauth import YandexOAuthService
 from app.infrastructure.databases.postgres.config import PostgresConfig
 from app.infrastructure.databases.postgres.setup import (
     get_postgres_engine,
@@ -33,6 +35,7 @@ def provide_database(provider: Provider) -> None:
 
 def provide_auth(provider: Provider) -> None:
     provider.from_context(AuthConfig, scope=Scope.APP)
+    provider.from_context(YandexOAuthConfig, scope=Scope.APP)
     provider.provide(
         HttpIdentityProvider,
         scope=Scope.REQUEST,
@@ -43,6 +46,11 @@ def provide_auth(provider: Provider) -> None:
         FastAPIAuthTokenGettable,
         scope=Scope.REQUEST,
         provides=AuthTokenGettable,
+    )
+    provider.provide(
+        YandexOAuthService,
+        scope=Scope.REQUEST,
+        provides=ExternalOAuthService,
     )
 
 

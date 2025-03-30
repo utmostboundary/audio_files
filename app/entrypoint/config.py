@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-from app.infrastructure.auth.config import AuthConfig
+from app.infrastructure.auth.config import AuthConfig, YandexOAuthConfig
 from app.infrastructure.databases.postgres.config import PostgresConfig
 
 
@@ -27,11 +27,22 @@ def get_auth_config() -> AuthConfig:
     )
 
 
+def get_yandex_oauth_config() -> YandexOAuthConfig:
+    return YandexOAuthConfig(
+        client_id=os.environ.get("YANDEX_OAUTH_CLIENT_ID"),
+        client_secret=os.environ.get("YANDEX_OAUTH_CLIENT_SECRET"),
+        code_exchange_url="https://oauth.yandex.ru/token",
+        token_exchange_url="https://login.yandex.ru/info",
+    )
+
+
 def provide_context() -> dict:
     postgres_config = get_postgres_config()
     auth_config = get_auth_config()
+    yandex_oauth_config = get_yandex_oauth_config()
     context = {
         PostgresConfig: postgres_config,
         AuthConfig: auth_config,
+        YandexOAuthConfig: yandex_oauth_config,
     }
     return context
