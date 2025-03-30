@@ -4,5 +4,11 @@ from app.application.entities.user import UserId, User
 
 
 class UserGateway(Protocol):
+    def add(self, user: User):
+        raise NotImplementedError
+
     async def by_id(self, user_id: UserId) -> User | None:
+        raise NotImplementedError
+
+    async def by_email(self, email: str) -> User | None:
         raise NotImplementedError

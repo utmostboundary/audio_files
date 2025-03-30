@@ -1,14 +1,36 @@
+from dataclasses import dataclass
+
+
+@dataclass(eq=False)
 class ApplicationError(Exception):
-    pass
+
+    @property
+    def message(self):
+        return "Application error"
 
 
+@dataclass(eq=False)
 class AuthenticationError(ApplicationError):
-    pass
+    text: str
+
+    @property
+    def message(self):
+        return self.text
 
 
+@dataclass(eq=False)
 class InvalidTokenError(ApplicationError):
-    pass
+    text: str
+
+    @property
+    def message(self):
+        return self.text
 
 
+@dataclass(eq=False)
 class AuthorizationError(ApplicationError):
-    pass
+    text: str
+
+    @property
+    def message(self):
+        return self.text

@@ -4,7 +4,7 @@ from typing import NewType
 AudioFileId = NewType("AudioFileId", int)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class AudioFile:
     id: AudioFileId
     name: str

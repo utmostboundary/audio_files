@@ -14,4 +14,4 @@ async def sign_in(request: SignInRequest, handler: FromDishka[AuthenticationServ
         credentials = await handler.sign_in(request=request)
         return credentials
     except ApplicationError as e:
-        raise HTTPException(status_code=400, detail=e)
+        raise HTTPException(status_code=400, detail=e.message)

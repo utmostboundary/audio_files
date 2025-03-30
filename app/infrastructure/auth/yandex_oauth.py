@@ -24,7 +24,7 @@ class YandexOAuthService(ExternalOAuthService):
             ) as resp:
                 if resp.status != 200:
                     raise AuthorizationError(
-                        "Error fetching user data from Yandex OAuth. "
+                        text="Error fetching user data from Yandex OAuth. "
                     )
                 result = await resp.json()
                 return UserData(email=result["default_email"])
@@ -32,24 +32,26 @@ class YandexOAuthService(ExternalOAuthService):
     async def _fetch_token(self, code) -> str:
         auth_str = f"{self._config.client_id}:{self._config.client_secret}"
         auth_b64 = base64.b64encode(auth_str.encode()).decode()
+        print(f"================CODE {code}")
         data = {
             "grant_type": "authorization_code",
             "code": code,
+            "client_id": self._config.client_id,
+            "client_secret": self._config.client_secret,
         }
-        headers = {
-            "Authorization": f"Basic {auth_b64}",
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
+        # headers = {
+        #     "Authorization": f"Basic {auth_b64}",
+        #     "Content-Type": "application/x-www-form-urlencoded",
+        # }
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self._config.code_exchange_url,
-                headers=headers,
                 data=data,
             ) as resp:
                 if resp.status != 200:
                     raise AuthorizationError(
-                        "Error fetching user data from Yandex OAuth. "
+                        text="Error fetching user data from Yandex OAuth. "
                     )
                 result = await resp.json()
                 return result["access_token"]

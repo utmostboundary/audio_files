@@ -11,9 +11,9 @@ class UserRole(Enum):
     ADMIN = "ADMIN"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class User:
-    id: UserId
+    id: UserId | None
     email: str
     role: UserRole
 

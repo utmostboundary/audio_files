@@ -11,6 +11,8 @@ services:
       sh -c "uvicorn app.entrypoint.main:create_fastapi_app --factory --reload --host 0.0.0.0 --port 8000"
     depends_on:
       - db_postgres
+    ports:
+      - "8000:8000"
     networks:
       - app_network
     restart: always
