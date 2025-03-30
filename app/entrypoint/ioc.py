@@ -9,6 +9,8 @@ from dishka.integrations.fastapi import FastapiProvider
 from app.application.auth.identity_provider import IdentityProvider
 from app.application.auth.oauth import ExternalOAuthService
 from app.application.auth.token_provider import TokenProvider
+from app.application.services.auth_service import AuthenticationService
+from app.application.transaction_manager import TransactionManager
 from app.infrastructure.auth.auth_token_gettable import AuthTokenGettable
 from app.infrastructure.auth.config import AuthConfig, YandexOAuthConfig
 from app.infrastructure.auth.http_idp import HttpIdentityProvider
@@ -20,22 +22,33 @@ from app.infrastructure.databases.postgres.setup import (
     get_async_sessionmaker,
     get_async_session,
 )
+from app.infrastructure.databases.postgres.transaction_manager import (
+    SqlATransactionManager,
+)
 from app.presentation.http.auth import FastAPIAuthTokenGettable
 
 
 def provide_config(provider: Provider) -> None:
     provider.from_context(PostgresConfig, scope=Scope.APP)
+    provider.from_context(AuthConfig, scope=Scope.APP)
+    provider.from_context(YandexOAuthConfig, scope=Scope.APP)
 
 
 def provide_database(provider: Provider) -> None:
     provider.provide(get_postgres_engine, scope=Scope.APP)
     provider.provide(get_async_sessionmaker, scope=Scope.APP)
     provider.provide(get_async_session, scope=Scope.REQUEST)
+    provider.provide(
+        SqlATransactionManager,
+        scope=Scope.REQUEST,
+        provides=TransactionManager,
+    )
+
+
+def provide_gateways(provider: Provider) -> None: ...
 
 
 def provide_auth(provider: Provider) -> None:
-    provider.from_context(AuthConfig, scope=Scope.APP)
-    provider.from_context(YandexOAuthConfig, scope=Scope.APP)
     provider.provide(
         HttpIdentityProvider,
         scope=Scope.REQUEST,
@@ -52,11 +65,14 @@ def provide_auth(provider: Provider) -> None:
         scope=Scope.REQUEST,
         provides=ExternalOAuthService,
     )
+    provider.provide(AuthenticationService, scope=Scope.REQUEST)
 
 
 def setup_provider(provider: Provider) -> None:
     provide_config(provider=provider)
     provide_database(provider=provider)
+    provide_auth(provider=provider)
+    provide_gateways(provider=provider)
 
 
 def setup_di(
